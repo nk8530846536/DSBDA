@@ -1,0 +1,294 @@
+# Gruop B
+## Assingment 2
+
+PART B Ass 2 Perform the following operations using Python on the AirQuality / Heart Disease  data sets i) Data Cleaning ii)  Data Transformation iii) Data Integration iv) Error Correcting v) Model Building
+
+
+import pandas as pd
+
+df=pd.read_csv('AirQualityodisha.csv',delimiter=',')
+df
+
+df.describe
+
+df.columns
+
+df.shape
+
+#i) Data Cleaning ii)  Data Transformation
+
+df.isnull().sum()
+
+
+med=df['PM 2.5'].mean()
+newdf=df['PM 2.5'].fillna(med)
+
+print(newdf.isnull().sum())
+
+
+med
+
+#!pip install mysql-connector-python
+
+#Data integration
+import mysql.connector as con
+
+try:
+    mydb=con.connect(host='localhost',user='root',passwd='mysql123')
+    print(mydb.is_connected())
+    mydb.close()
+except Exception as e:
+    print(str(e))
+
+try:
+    mydb=con.connect(host='localhost',user='root',passwd='mysql123')
+    print(mydb.is_connected())
+    cursor=mydb.cursor() # cursor object is used to execute the SQL queries , it creates the pointer
+    query="show databases"
+    cursor.execute(query)
+    print(cursor.fetchall())
+    mydb.close()
+except Exception as e:
+    print(str(e))
+
+query='create table testin.demotab(rollno int(10),name VARCHAR(10), addr VARCHAR(50),section VARCHAR(10))'
+mydb=con.connect(host='localhost',user='root',passwd='mysql123')
+print(mydb.is_connected())
+cursor=mydb.cursor()
+cursor.execute(query)
+
+try:
+    mydb=con.connect(host='localhost',user='root',passwd='mysql123')
+    print(mydb.is_connected())
+    cursor=mydb.cursor() # cursor object is used to execute the SQL queries , it creates the pointer
+    query1="use testin"
+    cursor.execute(query1)
+    query2="show tables"
+    cursor.execute(query2)
+    print(cursor.fetchall())
+    mydb.close()
+except Exception as e:
+    print(str(e))
+
+try:
+    mydb=con.connect(host='localhost',database='newglass',user='root',passwd='mysql123')
+    print(mydb.is_connected())
+    cursor=mydb.cursor() 
+    query2="show databases"
+    cursor.execute(query2)
+    print(cursor.fetchall())
+    mydb.close()
+except Exception as e:
+    print(str(e))
+
+import mysql.connector as conn
+import pandas as pd
+import csv
+try:
+    mydb=conn.connect(host='localhost',user='root',passwd='mysql123',use_pure=True)
+    print(mydb.is_connected())
+    #query="create database glassdata1"
+    #cursor=mydb.cursor()
+    #cursor.execute(query)
+    #print("Database created")
+    mydb.close()
+    mydb=conn.connect(host="localhost",database='newglass',user='root',passwd='mysql123',use_pure=True)
+    query="create table if not exists glassdata11 (index_number INT(10),RI float (10,5),Na float(10,5),Mg float(10,5),Al float(10,5),Si float(10,5),K float(10,5),Ca float(10,5),Ba float(10,5),Fe float(10,5),Class int(10))"
+    
+    cursor=mydb.cursor()
+    cursor.execute(query)
+    print('table created')
+    #load the data from file to database 
+    with open('glass.data',"r") as f:
+        next(f)
+        glass_data=csv.reader(f,delimiter="\n")
+        print(type(glass_data))
+        for line in enumerate(glass_data):
+            print(line)
+            for list_ in (line[1]):
+                print(list_)
+                cursor.execute('insert into glassdata11 values ({values})'.format(values=list_))
+        print("values inserted")
+        mydb.commit()
+        cursor.close()
+        mydb.close()
+except Exception as e:
+    print(str(e))
+
+import mysql.connector as con
+import pandas as pd
+try:
+    mydb=con.connect(host='localhost',database='newglass',user='root',passwd='mysql123',use_pure=True)
+    cursor=mydb.cursor()
+    query1="use newglass"
+    cursor.execute(query1)
+    query="select * from glassdata11;"
+        
+    dataframe_result=pd.read_sql(query,mydb)
+    print(dataframe_result)
+    #mydb.close()
+except Exception as e:
+    print(str(e))
+
+import mysql.connector as con
+import pandas as pd
+try:
+    mydb=con.connect(host='localhost',database='newglass',user='root',passwd='mysql123',use_pure=True)
+    cursor=mydb.cursor()
+    query1="use newglass"
+    cursor.execute(query1)
+    query="select Si,Count(Si),Class from newglass.glassdata11 group by Class order by Si;"
+
+    dataframe_result=pd.read_sql(query,mydb)
+    print(dataframe_result)
+    #mydb.close()
+except Exception as e:
+    print(str(e))
+
+import sqlite3
+
+db=sqlite3.connect('sample.db')
+
+c=db.cursor()
+
+c.execute('create table company1(id int,name text, age int,addr text,salary real)')
+
+c.execute("insert into company1 values(1,'vsk',40,'sfdsf',90000)")
+
+c.execute("insert into company1 values(2,'vsk2',32,'sfdsf',93000)")
+
+data=c.execute("select * from company1")
+
+for record in data:
+    print(record)
+
+#error correction
+df=pd.read_csv('AirQualityodisha.csv',delimiter=',')
+df_wna = df.dropna(subset=['PM 2.5'])
+x=df['PM 2.5'].isnull().sum()
+print("Total number of null values "+ str(x))
+
+df
+
+x=df_wna['PM 2.5'].isnull().sum()
+print("Total number of null values "+ str(x))
+
+df.columns
+
+df['so2_total']=df.groupby('City')['SO2'].transform('sum')
+
+df.columns
+
+
+
+
+
+
+
+
+
+
+
+
+Heart Disease
+
+
+
+
+
+
+""" Visualize the data using Python libraries matplotlib,seaborn by plotting the graphs for assignment
+no. 2 and 3 ( Group B)"""
+
+import numpy as np
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+%matplotlib inline
+import seaborn as sns
+
+df=pd.read_csv('heart.csv')
+df
+
+df.info()
+
+df.info()
+
+df.columns
+
+df=df.drop('Unnamed: 0',axis=1)
+
+df['AHD']=df['AHD'].replace({"Yes":1,"No":0})
+
+df['Sex'].plot(kind='hist')
+
+sns.countplot(df["Sex"])
+
+fig=plt.figure(figsize=(20,10))
+sns.boxplot(data = df,notch = True,linewidth = 2.5, width = 0.50)
+plt.show()
+
+df.plot(subplots=True,sharex=False,layout=(6,2),figsize=(16,8))
+plt.tight_layout() # 2 rows and 3 cols
+
+df.plot.hist()
+
+df.plot(kind='box', subplots=True, layout=(2,7), sharex=False,sharey=False, figsize=(20, 10), 
+color='red');
+
+sns.boxplot(x='AHD', y='Oldpeak', data=df)
+
+df['Age'].hist().plot(kind='bar')
+plt.title('Age Distribution')
+
+print(df.Age.value_counts()[:10])
+sns.barplot(x=df.Age.value_counts()[:10].index,
+y=df.Age.value_counts()[:10].values,
+palette='Set2')
+plt.xlabel('Age')
+plt.ylabel('Age distribution')
+
+ #Gender distribution according to target variable
+#fig, ax = plt.subplots(figsize=(8,5))
+name = df['Sex']
+ax = sns.countplot(x='Sex', hue='AHD', data=df, palette='Set2')
+
+fig, ax = plt.subplots(figsize=(10,5))
+name = df['ChestPain']
+ax = sns.countplot(x='ChestPain', hue='AHD', data=df, palette='Set2')
+#ax.set_title("Chest Pain Distribution according to Target", fontsize = 13, weight = 'bold')
+#ax.set_xticklabels (name,rotation =303)
+
+minAge =min(df["Age"])
+maxAge =max(df["Age"])
+avgAge = (df["Age"]).mean()
+print("Minimum age:",minAge)
+print("Maximum age:",maxAge)
+print("Average age:",avgAge)
+
+Young_age = df[(df.Age>=29)&(df.Age<40)]
+Meddle_age = df[(df.Age>=40)&(df.Age<55)]
+Elderly_age = df[(df.Age>55)]
+
+sns.barplot(x = ["Young ages","Meddle Ages","Elderly ages"], y =[len(Young_age),len(Meddle_age),len(Elderly_age)], color = "red")
+
+f,ax=plt.subplots(1,2,figsize=(10,6))
+df["AHD"].value_counts().plot.pie(ax = ax[0],autopct='%1.1f%%')
+sns.countplot('AHD',data=df,ax=ax[1],order=df['Sex'].value_counts().index)
+
+f,ax=plt.subplots(1,2,figsize=(10,6))
+df["ChestPain"].value_counts().plot.pie(ax = ax[0],autopct='%1.1f%%')
+sns.countplot('ChestPain',data=df,ax=ax[1],order=df['Sex'].value_counts().index)
+
+sns.countplot(df["AHD"])
+
+corr = df.corr()
+corr
+
+plt.figure(figsize =(20,15))
+sns.heatmap(corr,annot= True)
+
+
+
+
+
